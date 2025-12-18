@@ -1,62 +1,42 @@
 # Prog5Projet
 
-## Setting up
-- Make sure you have gcc-arm-none-eabi installed or have any sorta environment to run idk.
-- **Extract the tar.gz**: `tar -xvzf student_elf_linker-1.0.tar.gz`
-- In the `cd` into `code_fourni/elf_linker-1.0`, run `./configure && make && make install`. You are probably going to need root permission.
-- Alternatively, execute each command directly, here is a plagiarized section from the `INSTALL`:
-```
- The simplest way to compile this package is:
 
-  1. `cd' to the directory containing the package's source code and type
-     `./configure' to configure the package for your system.
 
-     Running `configure' might take a while.  While running, it prints
-     some messages telling which features it is checking for.
 
-  2. Type `make' to compile the package.
+## Progress tracking:
+- **15/12/2025**: Partially completed ELF header reader and section table reader
+- **16/12/2025**: ELF header reader is complete
+- **17/12/2025**: Section header table printing is complete
+- **18/12/2025**: Added fully functional section dumper
 
-  3. Optionally, type `make check' to run any self-tests that come with
-     the package, generally using the just-built uninstalled binaries.
-
-  4. Type `make install' to install the programs and any data files and
-     documentation.  When installing into a prefix owned by root, it is
-     recommended that the package be configured and built as a regular
-     user, and only the `make install' phase executed with root
-     privileges.
-
-  5. Optionally, type `make installcheck' to repeat any self-tests, but
-     this time using the binaries in their final installed location.
-     This target does not install anything.  Running this target as a
-     regular user, particularly if the prior `make install' required
-     root privileges, verifies that the installation completed
-     correctly.
-
-  6. You can remove the program binaries and object files from the
-     source code directory by typing `make clean'.  To also remove the
-     files that `configure' created (so you can compile the package for
-     a different kind of computer), type `make distclean'.  There is
-     also a `make maintainer-clean' target, but that is intended mainly
-     for the package's developers.  If you use it, you may have to get
-     all sorts of other programs in order to regenerate files that came
-     with the distribution.
-
-  7. Often, you can also type `make uninstall' to remove the installed
-     files again.  In practice, not all packages have tested that
-     uninstallation works correctly, even though it is required by the
-     GNU Coding Standards.
-
-  8. Some packages, particularly those that use Automake, provide `make
-     distcheck', which can by used by developers to test that all other
-     targets like `make install' and `make uninstall' work correctly.
-     This target is generally not run by end users.
-```
-
-Containing in `Options_and_debug_example.c` is a program collecting 2 options `--option1` and `--option2`. Give it a read.
-
-In `elf_linker-1.0` are examples of a case of fusion. I'd try to use `arm-none-eabi-readelf -h` on one of the `.o`. Maybe try exploring there.
+### Current program:
+We use a mix of header files for definitions and .c files for functions (like any other sane human beings), the main program for phase 1 is located in `elf_reader.c` where arguments are taken. Below are brief descriptions of each files:
+#### Header files:
+-  `elf.h`: definitions for the ELF format, including but not limited to: `Elf32_Ehdr`
+-  `units_elf32.h`: definitions of the types, for example `Elf32_Word`
+-  `util.h`: given file, containing a function to determine if a file is big endian
+#### .c files:
+- `elf_reader.c` : main program for reading ELF
+- `header_reader.c`: functions to read and print the ELF header
+- `header_section_reader`: functions to read and print the Section headers table
+- `section_reader.c`: functions to dump a section
+- `util.c`: given file
 
 ## Phase 1
+
+### Usage for elf_reader
+As of right now, there is only one executable to be made, compile with 
+```
+$make
+```
+This should compile `elf_reader`, whose usage is:
+```
+$./elf_reader <option(s)> <file_name>
+```
+The current options are :  
+-    -h      :   display the ELF header
+-    -S      :   display the section header table
+-    -x <int>:   dump a section
 
 ### Abstracts
 There are three main types of object files  
@@ -71,8 +51,6 @@ An object file can be seen from two sides: linking view and execution view (figu
 The linking view is used for linking relocatable files and for debugging, because it is based on sections.
 The execution view is used by the OS loader and the dynamic linker to map segments of executables and shared objects into memory.
 (sections and segments to be explained later)
-
-
 ### Step 1
 
 #### A. What we are dealing with
@@ -131,16 +109,11 @@ To note:
 
 -  `e_ehsize` dictates how many bits the object is based on, 52 bytes for 32-bits and 64 bytes for 64-bits.
 
--  There will (probably) be needs no consult the specific `e_flags` of ARM, in that case, consult table 4-2 below.
-
-![alt text](image.png)
-
 #### B. C Implementation for header reader
 
 **The approach**: It is certain that the header is at the beginning of the file, and all its components are well defined as per the documents. The plan is to read, according to the structures, all the bytes of the header, using `fread` or any equivalence.
 
-We define the same structure type `ELF32_Ehdr` in C, and a function `ELF_header_reader()` who returns said struct by reading the file. Because the scope of project is limited to BIG ENDIAN objects, we are expected to inverse the data read. However, in real scenario, it is good to have a switch to allow optional inversion of data. In our case, it is not probably implemented, however there is a macro `__BIGENDIAN__` permitting said switch if needed.
-
+We define the same structure type `ELF32_Ehdr` in C, and a function `ELF_header_reader()` who returns said struct by reading the file. 
 #### C. Displaying the header
 
 This section will briefly explain how each parameter is pulled from the header.  

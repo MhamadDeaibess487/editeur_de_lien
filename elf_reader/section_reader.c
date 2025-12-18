@@ -84,9 +84,9 @@ void print_section(FILE* stream, int section_index, Elf32_Shdr * Shdr){
     printf("\n");
     printf("Offset: 0x%.8x\n",Shdr[section_index].sh_offset);
     fseek(stream, Shdr[section_index].sh_offset,SEEK_SET);
-    char c ;
+    unsigned char c;
     for (int i =0; i<Shdr[section_index].sh_size;i++){  
-        fread(&c,sizeof(char),1,stream);
+        fread(&c,sizeof(unsigned char),1,stream);
         if (i%16==0 ){
             printf("\n0x%08x    ",i);
         }

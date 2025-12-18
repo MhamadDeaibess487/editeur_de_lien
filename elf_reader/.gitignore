@@ -1,5 +1,10 @@
 file1.test
 header_reader.o
 header_section_reader.o
-test_read_section_header.o
+elf_reader.o
+util.o
+elf_reader.o 
+header_reader.o 
+header_section_reader.o 
+section_reader.o 
 util.o

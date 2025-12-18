@@ -5,10 +5,12 @@
 #include "util.h"
 #include "units_elf32.h"
 #include "elf.h"
-#define __BIGENDIAN__
 
 //WILL ONLY READ CORRECTLY IF FILE IS 32 BITS
 Elf32_Ehdr* ELF_header_reader(FILE *stream){
+    if (!stream){
+        return NULL;
+    }
 
     Elf32_Ehdr* header=malloc(sizeof(Elf32_Ehdr));
     if(!header){
@@ -38,8 +40,7 @@ Elf32_Ehdr* ELF_header_reader(FILE *stream){
     fread(&(header->e_shnum),sizeof(Elf32_Half),1,stream);
     fread(&(header->e_shstrndx),sizeof(Elf32_Half),1,stream);
     
-
-    #ifdef __BIGENDIAN__
+    if (is_big_endian() == 0){
         header->e_type = reverse_2(header->e_type);
         header->e_machine = reverse_2(header->e_machine);
         header->e_version = reverse_4(header->e_version);
@@ -53,9 +54,8 @@ Elf32_Ehdr* ELF_header_reader(FILE *stream){
         header->e_shentsize = reverse_2(header->e_shentsize);
         header->e_shnum = reverse_2(header->e_shnum);
         header->e_shstrndx = reverse_2(header->e_shstrndx);
-    #endif
-
-
+    
+    }
     return header;
     }
 

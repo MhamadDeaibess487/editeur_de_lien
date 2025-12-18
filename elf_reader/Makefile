@@ -3,9 +3,9 @@ CFLAGS=-Wall -Werror
 
 .PHONY:clean all
 
-all: section_header_test
+all: elf_reader
 
-section_header_test: header_reader.o header_section_reader.o util.o test_read_section_header.o section_reader.o
+elf_reader: header_reader.o header_section_reader.o util.o elf_reader.o section_reader.o
 	$(CC) $(CFLAGS) $^ -o $@
  
 
