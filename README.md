@@ -19,8 +19,8 @@
 - Step 1: Deaibess, Saab, Le
 - Step 2: Jaber, Hijazi, Le
 - Step 3: Le
-- Step 4: Deaibess, Le
-- Step 5: Deaibess, Le
+- Step 4: Deaibess, Le, Jaber
+- Step 5: Deaibess, Le, Jaber, Saab
 - Step 6: Saab, Le
 - Step 7: Deaibess, Le
 - Step 8: Saab, Deaibess, Le
