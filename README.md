@@ -612,6 +612,73 @@ We can see that the offset are incremental, this facilitates writing.
 
 ## End of Phase 2
 This section here is being updated as of Thursday, 08/01/2026. 
+
+### testing
+Pour lancer un test, on exécute : ./test.sh
+
+####Progression des tests
+#####Phase 1 — elf_reader
+
+Comparaison : readelf vs ./elf_reader
+
+PASS/FAIL via diff
+
+#####Phase 2 — elf_fusion
+
+Vérification :
+
+Mappage des sections
+
+Offsets
+
+Remappage des symboles
+
+Comparaison avec : arm-none-eabi-ld -r -Map=map.txt
+
+#####Phase 3 — elf_writer (validation binaire)
+
+Fusion à l’aide de arm-none-eabi-ld -EB -r file1.o file2.o
+
+Écriture du fichier fusionné à partir de ./elf_fusion en utilisant ./elf_writer
+
+readelf -h ourfile.o et file.o
+
+Comparaison des sorties de readelf
+
+#####Phase 1 – Tests du lecteur ELF
+
+Nous avons validé le lecteur ELF en comparant sa sortie avec celle de GNU readelf pour des fichiers objet ARM ELF32 générés à partir de sources assembleur contrôlées. Chaque test cible une fonctionnalité spécifique de l’ELF (vide, texte, sections, symboles, relocations). Les tests sont entièrement automatisés via des scripts shell et utilisent une comparaison basée sur diff pour garantir une équivalence stricte.
+
+Exemple d’un test réussi :
+
+=== Testing empty ===
+✔ empty OK
+=== Testing text_only ===
+✔ text_only OK
+=== Testing data_text ===
+✔ data_text OK
+=== Testing symbols ===
+✔ symbols OK
+=== Testing reloc_text ===
+✔ reloc_text OK
+
+
+Tous les tests du lecteur sont PASSÉS.
+Si un test échoue → diff arrête immédiatement le script.
+
+Nous avons détecté un bug lors des tests où le nombre de sections affiché était incorrect.
+Cela provenait d’une mauvaise gestion de l’endianess du champ e_shnum, ce qui provoquait une lecture hors limites de la table des sections.
+
+#####Phase 2 – Tests du fusionneur ELF
+
+Ce script permet de valider la logique de fusion indépendamment de l’écriture binaire. Nous comparons la structure produite par notre outil avec celle du linker officiel afin de garantir la cohérence des calculs avant génération du fichier ELF final.
+
+
+#####Phase 3 – Tests de l’écriture ELF
+
+Ce test valide l’écriture finale du fichier ELF en comparant sa structure complète avec celle produite par le linker ARM officiel, à l’aide de readelf. Toute divergence est analysée structurellement et non textuellement.
+
+
 ### Known bugs
 We are now discussing of a bug, explained simply by comparing the two output:
 ```
