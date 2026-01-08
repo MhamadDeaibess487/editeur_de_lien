@@ -12,7 +12,10 @@
 //read an array of section headers
 void readShtable(FILE *stream, Elf32_Ehdr *hdr, Elf32_Shdr **Shdr);
 
+void swap_Elf32_Shdr(Elf32_Shdr *s);
+
 //display said array
 void printShtable(Elf32_Shdr* shtable, Elf32_Ehdr* hdr,FILE *stream);
+void printShtable_noname(Elf32_Shdr* shtable, Elf32_Ehdr* hdr);
 
 #endif
