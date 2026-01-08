@@ -39,7 +39,7 @@ void copy_byte(FILE* dest, FILE* source, uint32_t num){
 int main(int argc, char **argv)
 {
     if (argc <3) {
-        fprintf(stderr, "Usage: %s <file1.o> <file2.o>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <file1.o> <file2.o> <file3output (optional)\n", argv[0]);
         return 1;
     }
 
