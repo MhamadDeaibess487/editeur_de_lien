@@ -12,7 +12,7 @@
 - **01/01/2026**: The entirety of phase 1 is completed
 - **05/01/2026**: Barebone structure for step 6, barebones for step 7
 - **07/01/2026**: Completing step 6 and 7, working on 8 and 9
-- **09/01/2026** : Completion of ELF features
+- **08/01/2026** : Completion of ELF features
 
 ## Repartition of work:
 #### Programming the main program:
