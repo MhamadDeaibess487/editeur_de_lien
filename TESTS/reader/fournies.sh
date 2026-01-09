@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+echo "=== TEST ELF_READER : data_text ==="
+
+../../elf_reader/elf_reader -h -S -x 4 -s -r exemple1.o
+../../elf_reader/elf_reader -h -S -x 4 -s -r exemple2.o
+../../elf_reader/elf_reader -h -S -x 4 -s -r file1.o
+../../elf_reader/elf_reader -h -S -x 4 -s -r file2.o
